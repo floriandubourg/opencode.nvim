@@ -8,6 +8,18 @@ local function on_error(err)
   end
 end
 
+---Configure opencode.nvim.
+---
+---Called by lazy.nvim when `opts` is set in the plugin spec.
+---Merges `opts` into `vim.g.opencode_opts`. Keymaps and server setup
+---are already applied by `plugin/lazy.lua` at startup.
+---
+---@param opts? table User-provided options to merge.
+function M.setup(opts)
+  vim.g.opencode_opts = vim.tbl_deep_extend("force", vim.g.opencode_opts or {}, opts or {})
+  return M
+end
+
 ---Input a prompt for OpenCode.
 ---
 --- - Passes the text to `prompt()`.
