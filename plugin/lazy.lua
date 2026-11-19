@@ -254,4 +254,5 @@ function M.init()
   setup_which_key()
 end
 
+M.init()
 return M
