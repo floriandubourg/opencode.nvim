@@ -296,7 +296,11 @@ function Server:resolve_session()
   return self:get_sessions():next(function(sessions)
     for _, session in ipairs(sessions) do
       if not (session.time and session.time.archived) then
-        return Promise.resolve(session)
+        -- Only use sessions that match the expected directory.
+        -- A session from another directory would cause a 404 on prompt.
+        if session.location and session.location.directory == "/build" then
+          return Promise.resolve(session)
+        end
       end
     end
 

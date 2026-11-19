@@ -224,10 +224,10 @@ local function setup_which_key()
 end
 
 local function setup_server()
-  -- Connect to remote opencode via HTTP
+  -- Connect to remote opencode via HTTP. Always use port 18789.
   vim.g.opencode_opts = vim.g.opencode_opts or {}
   vim.g.opencode_opts.server = vim.tbl_deep_extend("force", vim.g.opencode_opts.server or {}, {
-    url = vim.g.opencode_opts.server and vim.g.opencode_opts.server.url or "http://127.0.0.1:18789",
+    url = "http://127.0.0.1:18789",
     username = "opencode",
     password = "opencode",
     -- Toggle opens a snacks.terminal connected to the remote opencode web UI

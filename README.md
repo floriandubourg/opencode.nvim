@@ -57,8 +57,7 @@ Configuration is passed via `vim.g.opencode_opts`. The plugin merges it with def
 ```lua
 vim.g.opencode_opts = {
   server = {
-    url = "http://127.0.0.1:18789",  -- direct URL; skips local discovery
-    -- If unset, the plugin discovers a local server via service.json, polling, or start()
+    url = "http://127.0.0.1:18789",  -- always 18789; skips local discovery
     username = "opencode",            -- basic auth (optional)
     password = nil,                   -- basic auth (optional)
     connect = true,                   -- connect immediately on first use
