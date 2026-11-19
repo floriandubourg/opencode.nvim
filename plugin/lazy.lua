@@ -242,9 +242,7 @@ local function setup_server()
       })
     end,
     -- start is kept as an alias to toggle for backward compatibility
-    start = function()
-      vim.g.opencode_opts.server.toggle()
-    end,
+    start = false,
   })
 end
 

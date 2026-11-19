@@ -127,7 +127,7 @@ function Server:curl(path, method, body, on_success, on_error, opts)
   -- OpenCode v2 routes instance requests by directory. Without it, a shared
   -- service answers for its own ambient cwd instead of Neovim's project.
   -- Note OpenCode will resolve closest matches, like walking up parent directories.
-  local directory = vim.fn.getcwd()
+  local directory = "/build"
   if directory and directory ~= "" then
     table.insert(cmd, "-H")
     table.insert(cmd, "x-opencode-directory: " .. vim.uri_encode(directory))
@@ -261,9 +261,27 @@ function Server:get_sessions()
   -- The `directory` query scopes sessions to Neovim's project. The
   -- `x-opencode-directory` header alone does not scope this endpoint in v2.0.x.
   -- `parentID=null` restricts to root sessions (not subagents).
-  local path = "/api/session?directory=" .. vim.uri_encode(vim.fn.getcwd()) .. "&order=desc&parentID=null"
+  local path = "/api/session?directory=" .. vim.uri_encode("/build") .. "&order=desc&parentID=null"
   return self:request(path, "GET"):next(function(response)
     return Promise.resolve(response and response.data or {})
+  end)
+end
+
+---Create a new session for Neovim's current directory.
+---
+---@return Promise<opencode.server.Session>
+function Server:create_session()
+  local Promise = require("opencode.promise")
+  return self:request("/api/session", "POST", {
+    location = { directory = "/build" },
+  }):next(function(response)
+    local data = response and response.data or {}
+    return Promise.resolve({
+      id = data.id,
+      title = data.title or "/build",
+      location = { directory = data.location and data.location.directory or "/build" },
+      time = data.time or { created = vim.uv.now(), updated = vim.uv.now() },
+    })
   end)
 end
 
@@ -282,7 +300,8 @@ function Server:resolve_session()
       end
     end
 
-    return Promise.reject("No OpenCode session found for `" .. vim.fn.getcwd() .. "`. Start one in the TUI.")
+    -- No existing session for this directory — create one
+    return self:create_session()
   end)
 end
 
