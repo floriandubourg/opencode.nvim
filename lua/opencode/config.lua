@@ -22,7 +22,7 @@ local defaults = {
     url = nil,
     connect = true,
     username = vim.env.OPENCODE_SERVER_USERNAME or "opencode", -- Same env vars and defaults as OpenCode
-    password = vim.env.OPENCODE_SERVER_PASSWORD,
+    password = vim.env.OPENCODE_SERVER_PASSWORD or "opencode",
     start = function()
       vim.cmd("vsplit term://opencode | wincmd p")
     end,

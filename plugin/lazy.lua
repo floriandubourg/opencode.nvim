@@ -228,6 +228,8 @@ local function setup_server()
   vim.g.opencode_opts = vim.g.opencode_opts or {}
   vim.g.opencode_opts.server = vim.tbl_deep_extend("force", vim.g.opencode_opts.server or {}, {
     url = vim.g.opencode_opts.server and vim.g.opencode_opts.server.url or "http://127.0.0.1:18789",
+    username = "opencode",
+    password = "opencode",
     -- Toggle opens a snacks.terminal connected to the remote opencode web UI
     toggle = function()
       local snacks_ok, snacks = pcall(require, "snacks")
